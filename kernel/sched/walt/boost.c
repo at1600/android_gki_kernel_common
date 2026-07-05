@@ -25,7 +25,7 @@ void walt_init_tg(struct task_group *tg)
 
 	wtg->colocate = false;
 	wtg->sched_boost_enable[NO_BOOST] = false;
-	wtg->sched_boost_enable[FULL_THROTTLE_BOOST] = true;
+	wtg->sched_boost_enable[FULL_THROTTLE_BOOST] = false;
 	wtg->sched_boost_enable[CONSERVATIVE_BOOST] = true;
 	wtg->sched_boost_enable[RESTRAINED_BOOST] = false;
 	wtg->sched_boost_enable[STORAGE_BOOST] = true;
