@@ -65,7 +65,7 @@ void walt_config(void)
 	/* pipeline defaults */
 	pipeline_sync_cpus = CPU_MASK_NONE;
 	demand_scaling_factor = 100;
-	min_demand_for_activity_cnt = 50;
+	min_demand_for_activity_cnt = 65;
 
 	for_each_possible_cpu(cpu) {
 		for (i = 0; i < LEGACY_SMART_FREQ; i++) {
