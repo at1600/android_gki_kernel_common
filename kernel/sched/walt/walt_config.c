@@ -41,7 +41,7 @@ void walt_config(void)
 	sysctl_sched_coloc_busy_hyst_max_ms = 5000;
 	sched_ravg_window = DEFAULT_SCHED_RAVG_WINDOW;
 //MIUI_ADD: Task_Attribute_Sched
-        miui_power_enhance = 0;
+        miui_power_enhance = 1;
 //END Task_Attribute_Sched
 	sysctl_input_boost_ms = 40;
 	sysctl_sched_min_task_util_for_boost = 51;
@@ -65,7 +65,7 @@ void walt_config(void)
 	/* pipeline defaults */
 	pipeline_sync_cpus = CPU_MASK_NONE;
 	demand_scaling_factor = 100;
-	min_demand_for_activity_cnt = 65;
+	min_demand_for_activity_cnt = 60;
 
 	for_each_possible_cpu(cpu) {
 		for (i = 0; i < LEGACY_SMART_FREQ; i++) {
