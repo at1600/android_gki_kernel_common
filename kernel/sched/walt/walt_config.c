@@ -43,8 +43,8 @@ void walt_config(void)
 //MIUI_ADD: Task_Attribute_Sched
         miui_power_enhance = 1;
 //END Task_Attribute_Sched
-	sysctl_input_boost_ms = 40;
-	sysctl_sched_min_task_util_for_boost = 51;
+	sysctl_input_boost_ms = 35;
+	sysctl_sched_min_task_util_for_boost = 56;
 	sysctl_sched_min_task_util_for_uclamp = 51;
 	sysctl_sched_min_task_util_for_colocation = 35;
 	sysctl_sched_many_wakeup_threshold = WALT_MANY_WAKEUP_DEFAULT;
