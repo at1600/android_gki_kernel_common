@@ -1,0 +1,5 @@
+ARCH=arm64
+make ARCH=$ARCH LLVM=1 LLVM_IAS=1 distclean
+make ARCH=$ARCH LLVM=1 LLVM_IAS=1 gki_defconfig
+# 覆盖arm64配置
+cp defconfig arch/arm64/configs/gki_defconfig
