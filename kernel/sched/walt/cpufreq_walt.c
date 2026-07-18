@@ -491,8 +491,8 @@ out:
 
 #define NL_RATIO 65
 #define DEFAULT_HISPEED_LOAD 90
-#define DEFAULT_SILVER_RTG_BOOST_FREQ 0
-#define DEFAULT_GOLD_RTG_BOOST_FREQ 0
+#define DEFAULT_SILVER_RTG_BOOST_FREQ 537600
+#define DEFAULT_GOLD_RTG_BOOST_FREQ 537600
 #define DEFAULT_PRIME_RTG_BOOST_FREQ 0
 
 static int find_target_boost(unsigned long util, struct waltgov_policy *wg_policy,
