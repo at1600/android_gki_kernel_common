@@ -137,7 +137,7 @@ void walt_config(void)
 		soc_feat_unset(SOC_ENABLE_CONSERVATIVE_BOOST_FG_BIT);
 		soc_feat_unset(SOC_ENABLE_UCLAMP_BOOSTED_BIT);
 		soc_feat_unset(SOC_ENABLE_PER_TASK_BOOST_ON_MID_BIT);
-		trailblazer_floor_freq[0] = 2500000;
+		trailblazer_floor_freq[0] = 384000;
 		sysctl_walt_features |= WALT_FEAT_TRAILBLAZER_BIT;
 		sysctl_walt_features |= WALT_FEAT_SYNC_FREQ_CAP_BIT;
 		sysctl_walt_features |= WALT_FEAT_TOPAPP_BASED_HISPEED;
@@ -190,7 +190,7 @@ void walt_config(void)
 		}
 		soc_feat_unset(SOC_ENABLE_THERMAL_HALT_LOW_FREQ_BIT);
 		if (strcmp(name, "ALOR_INTERPOSER") && strcmp(name, "ALOR"))
-			demand_scaling_factor = 70;
+			demand_scaling_factor = 75;
 	} else if (!strcmp(name, "PINEAPPLE")) {
 		soc_feat_set(SOC_ENABLE_SILVER_RT_SPREAD_BIT);
 		soc_feat_set(SOC_ENABLE_BOOST_TO_NEXT_CLUSTER_BIT);
