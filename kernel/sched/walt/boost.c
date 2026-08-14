@@ -25,10 +25,10 @@ void walt_init_tg(struct task_group *tg)
 
 	wtg->colocate = false;
 	wtg->sched_boost_enable[NO_BOOST] = false;
-	wtg->sched_boost_enable[FULL_THROTTLE_BOOST] = true;
+	wtg->sched_boost_enable[FULL_THROTTLE_BOOST] = false;
 	wtg->sched_boost_enable[CONSERVATIVE_BOOST] = false;
 	wtg->sched_boost_enable[RESTRAINED_BOOST] = false;
-	wtg->sched_boost_enable[STORAGE_BOOST] = true;
+	wtg->sched_boost_enable[STORAGE_BOOST] = false;
 	wtg->sched_boost_enable[BALANCE_BOOST] = false;
 	wtg->group_type = ANDROID_CGROUP_OTHER;
 }
@@ -39,12 +39,13 @@ void walt_init_topapp_tg(struct task_group *tg)
 
 	wtg->colocate = true;
 	wtg->sched_boost_enable[NO_BOOST] = false;
-	wtg->sched_boost_enable[FULL_THROTTLE_BOOST] = true;
+	wtg->sched_boost_enable[FULL_THROTTLE_BOOST] = false;
 	wtg->sched_boost_enable[CONSERVATIVE_BOOST] =
 		soc_feat(SOC_ENABLE_CONSERVATIVE_BOOST_TOPAPP_BIT);
 	wtg->sched_boost_enable[RESTRAINED_BOOST] = false;
-	wtg->sched_boost_enable[STORAGE_BOOST] = true;
-	wtg->sched_boost_enable[BALANCE_BOOST] = true;
+	wtg->sched_boost_enable[STORAGE_BOOST] =
+		soc_feat(SOC_ENABLE_CONSERVATIVE_BOOST_TOPAPP_BIT);
+	wtg->sched_boost_enable[BALANCE_BOOST] = false;
 	wtg->group_type = ANDROID_CGROUP_TOPAPP;
 }
 
@@ -58,8 +59,9 @@ void walt_init_foreground_tg(struct task_group *tg)
 	wtg->sched_boost_enable[CONSERVATIVE_BOOST] =
 		soc_feat(SOC_ENABLE_CONSERVATIVE_BOOST_FG_BIT);
 	wtg->sched_boost_enable[RESTRAINED_BOOST] = false;
-	wtg->sched_boost_enable[STORAGE_BOOST] = true;
-	wtg->sched_boost_enable[BALANCE_BOOST] = true;
+	wtg->sched_boost_enable[STORAGE_BOOST] = false;
+	wtg->sched_boost_enable[BALANCE_BOOST] =
+		soc_feat(SOC_ENABLE_CONSERVATIVE_BOOST_TOPAPP_BIT);
 	wtg->group_type = ANDROID_CGROUP_FOREGROUND;
 }
 
@@ -69,10 +71,10 @@ void walt_init_background_tg(struct task_group *tg)
 
 	wtg->colocate = false;
 	wtg->sched_boost_enable[NO_BOOST] = false;
-	wtg->sched_boost_enable[FULL_THROTTLE_BOOST] = true;
+	wtg->sched_boost_enable[FULL_THROTTLE_BOOST] = false;
 	wtg->sched_boost_enable[CONSERVATIVE_BOOST] = false;
 	wtg->sched_boost_enable[RESTRAINED_BOOST] = false;
-	wtg->sched_boost_enable[STORAGE_BOOST] = true;
+	wtg->sched_boost_enable[STORAGE_BOOST] = false;
 	wtg->sched_boost_enable[BALANCE_BOOST] = false;
 	wtg->group_type = ANDROID_CGROUP_BACKGROUND;
 }
