@@ -5,17 +5,17 @@
 
 #include <dt-bindings/clock/qcom,dsi-phy-28nm.h>
 #include <dt-bindings/clock/qcom,rpmh.h>
-#include <dt-bindings/clock/qcom,sm8750-cambistmclkcc.h>
-#include <dt-bindings/clock/qcom,sm8750-camcc.h>
-#include <dt-bindings/clock/qcom,sm8750-dispcc.h>
-#include <dt-bindings/clock/qcom,sm8750-gcc.h>
-#include <dt-bindings/clock/qcom,sm8750-tcsr.h>
-#include <dt-bindings/clock/qcom,sm8750-videocc.h>
+#include <dt-bindings/clock/qcom,sm8850-cambistmclkcc.h>
+#include <dt-bindings/clock/qcom,sm8850-camcc.h>
+#include <dt-bindings/clock/qcom,sm8850-dispcc.h>
+#include <dt-bindings/clock/qcom,sm8850-gcc.h>
+#include <dt-bindings/clock/qcom,sm8850-tcsr.h>
+#include <dt-bindings/clock/qcom,sm8850-videocc.h>
 #include <dt-bindings/dma/qcom-gpi.h>
 #include <dt-bindings/firmware/qcom,scm.h>
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/interconnect/qcom,icc.h>
-#include <dt-bindings/interconnect/qcom,sm8750-rpmh.h>
+#include <dt-bindings/interconnect/qcom,sm8850-rpmh.h>
 #include <dt-bindings/interrupt-controller/arm-gic.h>
 #include <dt-bindings/mailbox/qcom-ipcc.h>
 #include <dt-bindings/phy/phy-qcom-qmp.h>
@@ -217,7 +217,7 @@
 
 	firmware {
 		scm: scm {
-			compatible = "qcom,scm-sm8750", "qcom,scm";
+			compatible = "qcom,scm-", "qcom,scm";
 			interconnects = <&aggre2_noc MASTER_CRYPTO QCOM_ICC_TAG_ALWAYS
 					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
 		};
@@ -239,13 +239,13 @@
 	};
 
 	clk_virt: interconnect-0 {
-		compatible = "qcom,sm8750-clk-virt";
+		compatible = "qcom,-clk-virt";
 		#interconnect-cells = <2>;
 		qcom,bcm-voters = <&apps_bcm_voter>;
 	};
 
 	mc_virt: interconnect-1 {
-		compatible = "qcom,sm8750-mc-virt";
+		compatible = "qcom,-mc-virt";
 		#interconnect-cells = <2>;
 		qcom,bcm-voters = <&apps_bcm_voter>;
 	};
@@ -664,7 +664,7 @@
 		ranges = <0 0 0 0 0x10 0>;
 
 		gcc: clock-controller@100000 {
-			compatible = "qcom,sm8750-gcc";
+			compatible = "qcom,-gcc";
 			reg = <0x0 0x00100000 0x0 0x1f4200>;
 
 			clocks = <&bi_tcxo_div2>,
@@ -682,7 +682,7 @@
 		};
 
 		ipcc: mailbox@406000 {
-			compatible = "qcom,sm8750-ipcc", "qcom,ipcc";
+			compatible = "qcom,-ipcc", "qcom,ipcc";
 			reg = <0x0 0x00406000 0x0 0x1000>;
 
 			interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
@@ -693,7 +693,7 @@
 		};
 
 		gpi_dma2: dma-controller@800000 {
-			compatible = "qcom,sm8750-gpi-dma", "qcom,sm6350-gpi-dma";
+			compatible = "qcom,-gpi-dma", "qcom,sm6350-gpi-dma";
 			reg = <0x0 0x00800000 0x0 0x60000>;
 
 			interrupts = <GIC_SPI 588 IRQ_TYPE_LEVEL_HIGH>,
@@ -1505,7 +1505,7 @@
 		};
 
 		gpi_dma1: dma-controller@a00000 {
-			compatible = "qcom,sm8750-gpi-dma", "qcom,sm6350-gpi-dma";
+			compatible = "qcom,-gpi-dma", "qcom,sm6350-gpi-dma";
 			reg = <0x0 0x00a00000 0x0 0x60000>;
 
 			interrupts = <GIC_SPI 279 IRQ_TYPE_LEVEL_HIGH>,
@@ -2033,33 +2033,33 @@
 		};
 
 		rng: rng@10c3000 {
-			compatible = "qcom,sm8750-trng", "qcom,trng";
+			compatible = "qcom,-trng", "qcom,trng";
 			reg = <0x0 0x010c3000 0x0 0x1000>;
 		};
 
 		cnoc_main: interconnect@1500000 {
-			compatible = "qcom,sm8750-cnoc-main";
+			compatible = "qcom,-cnoc-main";
 			reg = <0x0 0x01500000 0x0 0x16080>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
 		};
 
 		config_noc: interconnect@1600000 {
-			compatible = "qcom,sm8750-config-noc";
+			compatible = "qcom,-config-noc";
 			reg = <0x0 0x01600000 0x0 0x6200>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
 		};
 
 		system_noc: interconnect@1680000 {
-			compatible = "qcom,sm8750-system-noc";
+			compatible = "qcom,-system-noc";
 			reg = <0x0 0x01680000 0x0 0x1d080>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
 		};
 
 		pcie_noc: interconnect@16c0000 {
-			compatible = "qcom,sm8750-pcie-anoc";
+			compatible = "qcom,-pcie-anoc";
 			reg = <0x0 0x016c0000 0x0 0x11400>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
@@ -2068,7 +2068,7 @@
 		};
 
 		aggre1_noc: interconnect@16e0000 {
-			compatible = "qcom,sm8750-aggre1-noc";
+			compatible = "qcom,-aggre1-noc";
 			reg = <0x0 0x016e0000 0x0 0x16400>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
@@ -2077,7 +2077,7 @@
 		};
 
 		aggre2_noc: interconnect@1700000 {
-			compatible = "qcom,sm8750-aggre2-noc";
+			compatible = "qcom,-aggre2-noc";
 			reg = <0x0 0x01700000 0x0 0x1f400>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
@@ -2085,7 +2085,7 @@
 		};
 
 		cambistmclkcc: clock-controller@1760000 {
-		       compatible = "qcom,sm8750-cambistmclkcc";
+		       compatible = "qcom,-cambistmclkcc";
 		       reg = <0x0 0x1760000 0x0 0x6000>;
 		       clocks = <&gcc GCC_CAM_BIST_MCLK_AHB_CLK>,
 				<&bi_tcxo_div2>,
@@ -2102,14 +2102,14 @@
 		};
 
 		mmss_noc: interconnect@1780000 {
-			compatible = "qcom,sm8750-mmss-noc";
+			compatible = "qcom,-mmss-noc";
 			reg = <0x0 0x01780000 0x0 0x5b800>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
 		};
 
 		ice: crypto@1d88000 {
-			compatible = "qcom,sm8750-inline-crypto-engine",
+			compatible = "qcom,-inline-crypto-engine",
 				     "qcom,inline-crypto-engine";
 			reg = <0x0 0x01d88000 0x0 0x18000>;
 
@@ -2138,7 +2138,7 @@
 		};
 
 		crypto: crypto@1dfa000 {
-			compatible = "qcom,sm8750-qce", "qcom,sm8150-qce", "qcom,qce";
+			compatible = "qcom,-qce", "qcom,sm8150-qce", "qcom,qce";
 			reg = <0x0 0x01dfa000 0x0 0x6000>;
 
 			interconnects = <&aggre2_noc MASTER_CRYPTO QCOM_ICC_TAG_ALWAYS
@@ -2159,7 +2159,7 @@
 		};
 
 		remoteproc_mpss: remoteproc@4080000 {
-			compatible = "qcom,sm8750-mpss-pas";
+			compatible = "qcom,-mpss-pas";
 			reg = <0x0 0x04080000 0x0 0x10000>;
 
 			interrupts-extended = <&intc GIC_SPI 264 IRQ_TYPE_EDGE_RISING>,
@@ -2212,7 +2212,7 @@
 		};
 
 		remoteproc_adsp: remoteproc@6800000 {
-			compatible = "qcom,sm8750-adsp-pas", "qcom,sm8550-adsp-pas";
+			compatible = "qcom,-adsp-pas", "qcom,sm8550-adsp-pas";
 			reg = <0x0 0x06800000 0x0 0x10000>;
 
 			interrupts-extended = <&pdc 6 IRQ_TYPE_EDGE_RISING>,
@@ -2360,7 +2360,7 @@
 		};
 
 		lpass_wsa2macro: codec@6aa0000 {
-			compatible = "qcom,sm8750-lpass-wsa-macro", "qcom,sm8550-lpass-wsa-macro";
+			compatible = "qcom,-lpass-wsa-macro", "qcom,sm8550-lpass-wsa-macro";
 			reg = <0x0 0x06aa0000 0x0 0x1000>;
 			clocks = <&q6prmcc LPASS_CLK_ID_WSA2_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
 				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
@@ -2407,7 +2407,7 @@
 		};
 
 		lpass_rxmacro: codec@6ac0000 {
-			compatible = "qcom,sm8750-lpass-rx-macro", "qcom,sm8550-lpass-rx-macro";
+			compatible = "qcom,-lpass-rx-macro", "qcom,sm8550-lpass-rx-macro";
 			reg = <0x0 0x06ac0000 0x0 0x1000>;
 			clocks = <&q6prmcc LPASS_CLK_ID_RX_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
 				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
@@ -2454,7 +2454,7 @@
 		};
 
 		lpass_txmacro: codec@6ae0000 {
-			compatible = "qcom,sm8750-lpass-tx-macro", "qcom,sm8550-lpass-tx-macro";
+			compatible = "qcom,-lpass-tx-macro", "qcom,sm8550-lpass-tx-macro";
 			reg = <0x0 0x06ae0000 0x0 0x1000>;
 			clocks = <&q6prmcc LPASS_CLK_ID_TX_CORE_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
 				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
@@ -2471,7 +2471,7 @@
 		};
 
 		lpass_wsamacro: codec@6b00000 {
-			compatible = "qcom,sm8750-lpass-wsa-macro", "qcom,sm8550-lpass-wsa-macro";
+			compatible = "qcom,-lpass-wsa-macro", "qcom,sm8550-lpass-wsa-macro";
 			reg = <0x0 0x06b00000 0x0 0x1000>;
 			clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
 				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
@@ -2518,21 +2518,21 @@
 		};
 
 		lpass_ag_noc: interconnect@7e40000 {
-			compatible = "qcom,sm8750-lpass-ag-noc";
+			compatible = "qcom,-lpass-ag-noc";
 			reg = <0x0 0x07e40000 0x0 0xe080>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
 		};
 
 		lpass_lpiaon_noc: interconnect@7400000 {
-			compatible = "qcom,sm8750-lpass-lpiaon-noc";
+			compatible = "qcom,-lpass-lpiaon-noc";
 			reg = <0x0 0x07400000 0x0 0x19080>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
 		};
 
 		lpass_lpicx_noc: interconnect@7420000 {
-			compatible = "qcom,sm8750-lpass-lpicx-noc";
+			compatible = "qcom,-lpass-lpicx-noc";
 			reg = <0x0 0x07420000 0x0 0x44080>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
@@ -2571,7 +2571,7 @@
 		};
 
 		lpass_vamacro: codec@7660000 {
-			compatible = "qcom,sm8750-lpass-va-macro", "qcom,sm8550-lpass-va-macro";
+			compatible = "qcom,-lpass-va-macro", "qcom,sm8550-lpass-va-macro";
 			reg = <0x0 0x07660000 0x0 0x2000>;
 			clocks = <&q6prmcc LPASS_CLK_ID_TX_CORE_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
 				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
@@ -2586,7 +2586,7 @@
 		};
 
 		lpass_tlmm: pinctrl@7760000 {
-			compatible = "qcom,sm8750-lpass-lpi-pinctrl",
+			compatible = "qcom,-lpass-lpi-pinctrl",
 				     "qcom,sm8650-lpass-lpi-pinctrl";
 			reg = <0x0 0x07760000 0x0 0x20000>;
 
@@ -2704,7 +2704,7 @@
 		};
 
 		sdhc_2: mmc@8804000 {
-			compatible = "qcom,sm8750-sdhci", "qcom,sdhci-msm-v5";
+			compatible = "qcom,-sdhci", "qcom,sdhci-msm-v5";
 			reg = <0x0 0x08804000 0x0 0x1000>;
 
 			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>,
@@ -2758,7 +2758,7 @@
 		};
 
 		usb_hsphy: phy@88e3000 {
-			compatible = "qcom,sm8750-m31-eusb2-phy";
+			compatible = "qcom,-m31-eusb2-phy";
 			reg = <0x0 0x88e3000 0x0 0x29c>;
 
 			clocks = <&tcsrcc TCSR_USB2_CLKREF_EN>;
@@ -2772,7 +2772,7 @@
 		};
 
 		usb_dp_qmpphy: phy@88e8000 {
-			compatible = "qcom,sm8750-qmp-usb3-dp-phy";
+			compatible = "qcom,-qmp-usb3-dp-phy";
 			reg = <0x0 0x088e8000 0x0 0x4000>;
 
 			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
@@ -2829,7 +2829,7 @@
 		};
 
 		usb: usb@a600000 {
-			compatible = "qcom,sm8750-dwc3", "qcom,snps-dwc3";
+			compatible = "qcom,-dwc3", "qcom,snps-dwc3";
 			reg = <0x0 0x0a600000 0x0 0xfc100>;
 
 			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
@@ -2918,7 +2918,7 @@
 		};
 
 		iris: video-codec@aa00000 {
-			compatible = "qcom,sm8750-iris";
+			compatible = "qcom,-iris";
 			reg = <0x0 0x0aa00000 0x0 0xf0000>;
 
 			clocks = <&gcc GCC_VIDEO_AXI0_CLK>,
@@ -3024,7 +3024,7 @@
 		};
 
 		videocc: clock-controller@aaf0000 {
-			compatible = "qcom,sm8750-videocc";
+			compatible = "qcom,-videocc";
 			reg = <0x0 0x0aaf0000 0x0 0x10000>;
 			clocks = <&bi_tcxo_div2>,
 				 <&gcc GCC_VIDEO_AHB_CLK>;
@@ -3038,7 +3038,7 @@
 		};
 
 		mdss: display-subsystem@ae00000 {
-			compatible = "qcom,sm8750-mdss";
+			compatible = "qcom,-mdss";
 			reg = <0x0 0x0ae00000 0x0 0x1000>;
 			reg-names = "mdss";
 
@@ -3071,7 +3071,7 @@
 			status = "disabled";
 
 			mdss_mdp: display-controller@ae01000 {
-				compatible = "qcom,sm8750-dpu";
+				compatible = "qcom,-dpu";
 				reg = <0x0 0x0ae01000 0x0 0x93000>,
 				      <0x0 0x0aeb0000 0x0 0x2008>;
 				reg-names = "mdp",
@@ -3162,7 +3162,7 @@
 			};
 
 			mdss_dsi0: dsi@ae94000 {
-				compatible = "qcom,sm8750-dsi-ctrl", "qcom,mdss-dsi-ctrl";
+				compatible = "qcom,-dsi-ctrl", "qcom,mdss-dsi-ctrl";
 				reg = <0x0 0x0ae94000 0x0 0x400>;
 				reg-names = "dsi_ctrl";
 
@@ -3251,7 +3251,7 @@
 			};
 
 			mdss_dsi0_phy: phy@ae95000 {
-				compatible = "qcom,sm8750-dsi-phy-3nm";
+				compatible = "qcom,-dsi-phy-3nm";
 				reg = <0x0 0x0ae95000 0x0 0x200>,
 				      <0x0 0x0ae95200 0x0 0x280>,
 				      <0x0 0x0ae95500 0x0 0x400>;
@@ -3271,7 +3271,7 @@
 			};
 
 			mdss_dsi1: dsi@ae96000 {
-				compatible = "qcom,sm8750-dsi-ctrl", "qcom,mdss-dsi-ctrl";
+				compatible = "qcom,-dsi-ctrl", "qcom,mdss-dsi-ctrl";
 				reg = <0x0 0x0ae96000 0x0 0x400>;
 				reg-names = "dsi_ctrl";
 
@@ -3336,7 +3336,7 @@
 			};
 
 			mdss_dsi1_phy: phy@ae97000 {
-				compatible = "qcom,sm8750-dsi-phy-3nm";
+				compatible = "qcom,-dsi-phy-3nm";
 				reg = <0x0 0x0ae97000 0x0 0x200>,
 				      <0x0 0x0ae97200 0x0 0x280>,
 				      <0x0 0x0ae97500 0x0 0x400>;
@@ -3356,7 +3356,7 @@
 			};
 
 			mdss_dp0: displayport-controller@af54000 {
-				compatible = "qcom,sm8750-dp", "qcom,sm8650-dp";
+				compatible = "qcom,-dp", "qcom,sm8650-dp";
 				reg = <0x0 0xaf54000 0x0 0x104>,
 				      <0x0 0xaf54200 0x0 0xc0>,
 				      <0x0 0xaf55000 0x0 0x770>,
@@ -3440,7 +3440,7 @@
 		};
 
 		dispcc: clock-controller@af00000 {
-			compatible = "qcom,sm8750-dispcc";
+			compatible = "qcom,-dispcc";
 			reg = <0x0 0x0af00000 0x0 0x20000>;
 
 			clocks = <&bi_tcxo_div2>,
@@ -3469,7 +3469,7 @@
 		};
 
 		camcc: clock-controller@ade0000 {
-			compatible = "qcom,sm8750-camcc";
+			compatible = "qcom,-camcc";
 			reg = <0x0 0xade0000 0x0 0x20000>;
 			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
 				 <&bi_tcxo_div2>,
@@ -3486,7 +3486,7 @@
 		};
 
 		pdc: interrupt-controller@b220000 {
-			compatible = "qcom,sm8750-pdc", "qcom,pdc";
+			compatible = "qcom,-pdc", "qcom,pdc";
 			reg = <0x0 0x0b220000 0x0 0x10000>, <0x0 0x164400f0 0x0 0x64>;
 
 			qcom,pdc-ranges = <0 745 51>, <51 527 47>,
@@ -3498,7 +3498,7 @@
 		};
 
 		tsens0: thermal-sensor@c228000 {
-			compatible = "qcom,sm8750-tsens", "qcom,tsens-v2";
+			compatible = "qcom,-tsens", "qcom,tsens-v2";
 			reg = <0x0 0x0c228000 0x0 0x1000>,
 			      <0x0 0x0c222000 0x0 0x1000>;
 			interrupts = <GIC_SPI 771 IRQ_TYPE_LEVEL_HIGH>,
@@ -3510,7 +3510,7 @@
 		};
 
 		tsens1: thermal-sensor@c229000 {
-			compatible = "qcom,sm8750-tsens", "qcom,tsens-v2";
+			compatible = "qcom,-tsens", "qcom,tsens-v2";
 			reg = <0x0 0x0c229000 0x0 0x1000>,
 			      <0x0 0x0c223000 0x0 0x1000>;
 			interrupts = <GIC_SPI 772 IRQ_TYPE_LEVEL_HIGH>,
@@ -3522,7 +3522,7 @@
 		};
 
 		tsens2: thermal-sensor@c22a000 {
-			compatible = "qcom,sm8750-tsens", "qcom,tsens-v2";
+			compatible = "qcom,sm8850-tsens", "qcom,tsens-v2";
 			reg = <0x0 0x0c22a000 0x0 0x1000>,
 			      <0x0 0x0c224000 0x0 0x1000>;
 			interrupts = <GIC_SPI 773 IRQ_TYPE_LEVEL_HIGH>,
@@ -3534,7 +3534,7 @@
 		};
 
 		tsens3: thermal-sensor@c22b000 {
-			compatible = "qcom,sm8750-tsens", "qcom,tsens-v2";
+			compatible = "qcom,sm8850-tsens", "qcom,tsens-v2";
 			reg = <0x0 0x0c22b000 0x0 0x1000>,
 			      <0x0 0x0c225000 0x0 0x1000>;
 			interrupts = <GIC_SPI 774 IRQ_TYPE_LEVEL_HIGH>,
@@ -3546,7 +3546,7 @@
 		};
 
 		aoss_qmp: power-management@c300000 {
-			compatible = "qcom,sm8750-aoss-qmp", "qcom,aoss-qmp";
+			compatible = "qcom,sm8850-aoss-qmp", "qcom,aoss-qmp";
 			reg = <0x0 0x0c300000 0x0 0x400>;
 
 			interrupt-parent = <&ipcc>;
@@ -3592,7 +3592,7 @@
 		};
 
 		tlmm: pinctrl@f100000 {
-			compatible = "qcom,sm8750-tlmm";
+			compatible = "qcom,sm8850-tlmm";
 			reg = <0x0 0x0f100000 0x0 0x102000>;
 
 			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
@@ -4097,7 +4097,7 @@
 		};
 
 		tcsrcc: clock-controller@f204008 {
-			compatible = "qcom,sm8750-tcsr", "syscon";
+			compatible = "qcom,sm8850-tcsr", "syscon";
 			reg = <0x0 0x0f204008 0x0 0x3004>;
 
 			clocks = <&rpmhcc RPMH_CXO_CLK>;
@@ -5048,7 +5048,7 @@
 		};
 
 		apps_smmu: iommu@15000000 {
-			compatible = "qcom,sm8750-smmu-500", "qcom,smmu-500", "arm,mmu-500";
+			compatible = "qcom,sm8850-smmu-500", "qcom,smmu-500", "arm,mmu-500";
 			reg = <0x0 0x15000000 0x0 0x100000>;
 
 			interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
@@ -5199,7 +5199,7 @@
 
 		pcie0: pcie@1c00000 {
 			device_type = "pci";
-			compatible = "qcom,pcie-sm8750", "qcom,pcie-sm8550";
+			compatible = "qcom,pcie-sm8850", "qcom,pcie-sm8550";
 			reg = <0x0 0x01c00000 0x0 0x3000>,
 			      <0x0 0x40000000 0x0 0xf1d>,
 			      <0x0 0x40000f20 0x0 0xa8>,
@@ -5345,7 +5345,7 @@
 		};
 
 		pcie0_phy: phy@1c06000 {
-			compatible = "qcom,sm8750-qmp-gen3x2-pcie-phy";
+			compatible = "qcom,sm8850-qmp-gen3x2-pcie-phy";
 			reg = <0 0x01c06000 0 0x2000>;
 
 			clocks = <&gcc GCC_PCIE_0_AUX_CLK>,
@@ -5376,7 +5376,7 @@
 		};
 
 		ufs_mem_phy: phy@1d80000 {
-			compatible = "qcom,sm8750-qmp-ufs-phy";
+			compatible = "qcom,sm8850-qmp-ufs-phy";
 			reg = <0x0 0x01d80000 0x0 0x2000>;
 
 			clocks = <&rpmhcc RPMH_CXO_CLK>,
@@ -5399,7 +5399,7 @@
 		};
 
 		ufs_mem_hc: ufs@1d84000 {
-			compatible = "qcom,sm8750-ufshc", "qcom,ufshc", "jedec,ufs-2.0";
+			compatible = "qcom,sm8850-ufshc", "qcom,ufshc", "jedec,ufs-2.0";
 			reg = <0x0 0x01d84000 0x0 0x3000>;
 
 			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
@@ -5478,7 +5478,7 @@
 		};
 
 		cpucp_mbox: mailbox@16430000 {
-			compatible = "qcom,sm8750-cpucp-mbox", "qcom,x1e80100-cpucp-mbox";
+			compatible = "qcom,sm8850-cpucp-mbox", "qcom,x1e80100-cpucp-mbox";
 			reg = <0x0 0x16430000 0x0 0x8000>, <0x0 0x17830000 0x0 0x8000>;
 			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
 			#mbox-cells = <1>;
@@ -5510,7 +5510,7 @@
 			};
 
 			rpmhcc: clock-controller {
-				compatible = "qcom,sm8750-rpmh-clk";
+				compatible = "qcom,sm8850-rpmh-clk";
 
 				clocks = <&xo_board>;
 				clock-names = "xo";
@@ -5519,7 +5519,7 @@
 			};
 
 			rpmhpd: power-controller {
-				compatible = "qcom,sm8750-rpmhpd";
+				compatible = "qcom,sm8850-rpmhpd";
 
 				operating-points-v2 = <&rpmhpd_opp_table>;
 
@@ -5716,7 +5716,7 @@
 
 		/* cluster0 */
 		pmu@240b3400 {
-			compatible = "qcom,sm8750-cpu-bwmon", "qcom,sdm845-bwmon";
+			compatible = "qcom,sm8850-cpu-bwmon", "qcom,sdm845-bwmon";
 			reg = <0x0 0x240b3400 0x0 0x600>;
 
 			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
@@ -5779,7 +5779,7 @@
 
 		/* cluster1 */
 		pmu@240b7400 {
-			compatible = "qcom,sm8750-cpu-bwmon", "qcom,sdm845-bwmon";
+			compatible = "qcom,sm8850-cpu-bwmon", "qcom,sdm845-bwmon";
 			reg = <0x0 0x240b7400 0x0 0x600>;
 
 			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
@@ -5791,14 +5791,14 @@
 		};
 
 		gem_noc: interconnect@24100000 {
-			compatible = "qcom,sm8750-gem-noc";
+			compatible = "qcom,sm8850-gem-noc";
 			reg = <0x0 0x24100000 0x0 0x14b080>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
 		};
 
 		system-cache-controller@24800000 {
-			compatible = "qcom,sm8750-llcc";
+			compatible = "qcom,sm8850-llcc";
 			reg = <0x0 0x24800000 0x0 0x200000>,
 			      <0x0 0x25800000 0x0 0x200000>,
 			      <0x0 0x24c00000 0x0 0x200000>,
@@ -5816,14 +5816,14 @@
 		};
 
 		nsp_noc: interconnect@320c0000 {
-			compatible = "qcom,sm8750-nsp-noc";
+			compatible = "qcom,sm8850-nsp-noc";
 			reg = <0x0 0x320c0000 0x0 0x13080>;
 			qcom,bcm-voters = <&apps_bcm_voter>;
 			#interconnect-cells = <2>;
 		};
 
 		remoteproc_cdsp: remoteproc@32300000 {
-			compatible = "qcom,sm8750-cdsp-pas", "qcom,sm8650-cdsp-pas";
+			compatible = "qcom,sm8850-cdsp-pas", "qcom,sm8650-cdsp-pas";
 			reg = <0x0 0x32300000 0x0 0x10000>;
 
 			interrupts-extended = <&intc GIC_SPI 578 IRQ_TYPE_EDGE_RISING>,
