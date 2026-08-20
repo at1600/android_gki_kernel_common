@@ -8,7 +8,7 @@
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/leds/common.h>
 #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-#include "sm8750.dtsi"
+#include "sm8850.dtsi"
 #include "pm8010.dtsi"
 #include "pm8550.dtsi"
 #define PMK8550VE_SID 8
@@ -17,11 +17,11 @@
 #include "pmih0108.dtsi"
 #include "pmk8550.dtsi"
 #include "pmr735d_a.dtsi"
-#include "sm8750-pmics.dtsi"
+#include "sm8850-pmics.dtsi"
 
 / {
-	model = "Qualcomm Technologies, Inc. SM8750 QRD";
-	compatible = "qcom,sm8750-qrd", "qcom,sm8750";
+	model = "Qualcomm Technologies, Inc. SM8850 QRD";
+	compatible = "qcom,sm8850-qrd", "qcom,sm8850";
 	chassis-type = "handset";
 
 	aliases {
@@ -112,8 +112,8 @@
 	};
 
 	sound {
-		compatible = "qcom,sm8750-sndcard", "qcom,sm8450-sndcard";
-		model = "SM8750-QRD";
+		compatible = "qcom,sm8850-sndcard", "qcom,sm8450-sndcard";
+		model = "sm8850-QRD";
 		audio-routing = "SpkrLeft IN", "WSA_SPK1 OUT",
 				"SpkrRight IN", "WSA_SPK2 OUT",
 				"IN1_HPHL", "HPHL_OUT",
@@ -194,7 +194,7 @@
 	};
 
 	pmic-glink {
-		compatible = "qcom,sm8750-pmic-glink",
+		compatible = "qcom,sm8850-pmic-glink",
 			     "qcom,sm8550-pmic-glink",
 			     "qcom,pmic-glink";
 		#address-cells = <1>;
@@ -945,22 +945,22 @@
 };
 
 &remoteproc_adsp {
-	firmware-name = "qcom/sm8750/adsp.mbn",
-			"qcom/sm8750/adsp_dtb.mbn";
+	firmware-name = "qcom/sm8850/adsp.mbn",
+			"qcom/sm8850/adsp_dtb.mbn";
 
 	status = "okay";
 };
 
 &remoteproc_cdsp {
-	firmware-name = "qcom/sm8750/cdsp.mbn",
-			"qcom/sm8750/cdsp_dtb.mbn";
+	firmware-name = "qcom/sm8850/cdsp.mbn",
+			"qcom/sm8850/cdsp_dtb.mbn";
 
 	status = "okay";
 };
 
 &remoteproc_mpss {
-	firmware-name = "qcom/sm8750/modem.mbn",
-			"qcom/sm8750/modem_dtb.mbn";
+	firmware-name = "qcom/sm8850/modem.mbn",
+			"qcom/sm8850/modem_dtb.mbn";
 
 	status = "okay";
 };
