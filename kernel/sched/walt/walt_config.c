@@ -138,12 +138,12 @@ void walt_config(void)
 		soc_sched_lib_name_capacity = 2;
 		soc_feat_unset(SOC_ENABLE_PIPELINE_SWAPPING_BIT);
 
-		sysctl_cluster01_load_sync[0]	= 350;
+		sysctl_cluster01_load_sync[0]	= 512;
 		sysctl_cluster01_load_sync[1]	= 100;
 		sysctl_cluster01_load_sync[2]	= 100;
-		sysctl_cluster10_load_sync[0]	= 512;
-		sysctl_cluster10_load_sync[1]	= 90;
-		sysctl_cluster10_load_sync[2]	= 90;
+		sysctl_cluster10_load_sync[0]	= 600;
+		sysctl_cluster10_load_sync[1]	= 80;
+		sysctl_cluster10_load_sync[2]	= 92;
 		load_sync_util_thres[0][1]	= sysctl_cluster01_load_sync[0];
 		load_sync_low_pct[0][1]		= sysctl_cluster01_load_sync[1];
 		load_sync_high_pct[0][1]	= sysctl_cluster01_load_sync[2];
@@ -156,7 +156,7 @@ void walt_config(void)
 		sysctl_cluster01_load_sync_60fps[2]	= 100;
 		sysctl_cluster10_load_sync_60fps[0]	= 450;
 		sysctl_cluster10_load_sync_60fps[1]	= 65;
-		sysctl_cluster10_load_sync_60fps[2]	= 80;
+		sysctl_cluster10_load_sync_60fps[2]	= 85;
 		load_sync_util_thres_60fps[0][1]	= sysctl_cluster01_load_sync_60fps[0];
 		load_sync_low_pct_60fps[0][1]		= sysctl_cluster01_load_sync_60fps[1];
 		load_sync_high_pct_60fps[0][1]		= sysctl_cluster01_load_sync_60fps[2];
