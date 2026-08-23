@@ -16,9 +16,9 @@ cpumask_t pipeline_sync_cpus;
 cpumask_t storage_boost_cpus;
 int oscillate_period_ns;
 int soc_sched_lib_name_capacity;
-#define PIPELINE_BUSY_THRESH_8MS_WINDOW 5
-#define PIPELINE_BUSY_THRESH_12MS_WINDOW 8
-#define PIPELINE_BUSY_THRESH_16MS_WINDOW 10
+#define PIPELINE_BUSY_THRESH_8MS_WINDOW 6
+#define PIPELINE_BUSY_THRESH_12MS_WINDOW 10
+#define PIPELINE_BUSY_THRESH_16MS_WINDOW 12
 
 void walt_config(void)
 {
