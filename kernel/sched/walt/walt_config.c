@@ -16,9 +16,9 @@ cpumask_t pipeline_sync_cpus;
 cpumask_t storage_boost_cpus;
 int oscillate_period_ns;
 int soc_sched_lib_name_capacity;
-#define PIPELINE_BUSY_THRESH_8MS_WINDOW 7
-#define PIPELINE_BUSY_THRESH_12MS_WINDOW 11
-#define PIPELINE_BUSY_THRESH_16MS_WINDOW 15
+#define PIPELINE_BUSY_THRESH_8MS_WINDOW 5
+#define PIPELINE_BUSY_THRESH_12MS_WINDOW 8
+#define PIPELINE_BUSY_THRESH_16MS_WINDOW 10
 
 void walt_config(void)
 {
@@ -65,8 +65,8 @@ void walt_config(void)
 	}
 
 	for (i = 0; i < MAX_MARGIN_LEVELS; i++) {
-		sysctl_sched_capacity_margin_up_pct[i] = 95; /* ~5% margin */
-		sysctl_sched_capacity_margin_dn_pct[i] = 85; /* ~15% margin */
+		sysctl_sched_capacity_margin_up_pct[i] = 98; /* ~5% margin */
+		sysctl_sched_capacity_margin_dn_pct[i] = 95; /* ~15% margin */
 		sysctl_sched_early_up[i] = 1077;
 		sysctl_sched_early_down[i] = 1204;
 	}
@@ -151,12 +151,12 @@ void walt_config(void)
 		load_sync_low_pct[1][0]		= sysctl_cluster10_load_sync[1];
 		load_sync_high_pct[1][0]	= sysctl_cluster10_load_sync[2];
 
-		sysctl_cluster01_load_sync_60fps[0]	= 400;
-		sysctl_cluster01_load_sync_60fps[1]	= 60;
+		sysctl_cluster01_load_sync_60fps[0]	= 340;
+		sysctl_cluster01_load_sync_60fps[1]	= 75;
 		sysctl_cluster01_load_sync_60fps[2]	= 100;
-		sysctl_cluster10_load_sync_60fps[0]	= 500;
-		sysctl_cluster10_load_sync_60fps[1]	= 70;
-		sysctl_cluster10_load_sync_60fps[2]	= 90;
+		sysctl_cluster10_load_sync_60fps[0]	= 450;
+		sysctl_cluster10_load_sync_60fps[1]	= 65;
+		sysctl_cluster10_load_sync_60fps[2]	= 80;
 		load_sync_util_thres_60fps[0][1]	= sysctl_cluster01_load_sync_60fps[0];
 		load_sync_low_pct_60fps[0][1]		= sysctl_cluster01_load_sync_60fps[1];
 		load_sync_high_pct_60fps[0][1]		= sysctl_cluster01_load_sync_60fps[2];
