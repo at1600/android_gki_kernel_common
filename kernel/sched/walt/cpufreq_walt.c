@@ -485,10 +485,10 @@ out:
 	return clamp(util, min_util, max_util);
 }
 
-#define NL_RATIO 75
-#define DEFAULT_HISPEED_LOAD 90
-#define DEFAULT_SILVER_RTG_BOOST_FREQ 1000000
-#define DEFAULT_GOLD_RTG_BOOST_FREQ 768000
+#define NL_RATIO 80
+#define DEFAULT_HISPEED_LOAD 98
+#define DEFAULT_SILVER_RTG_BOOST_FREQ 0
+#define DEFAULT_GOLD_RTG_BOOST_FREQ 0
 #define DEFAULT_PRIME_RTG_BOOST_FREQ 0
 static inline void max_and_reason(unsigned long *cur_util, unsigned long boost_util,
 		struct waltgov_cpu *wg_cpu, unsigned int reason)
