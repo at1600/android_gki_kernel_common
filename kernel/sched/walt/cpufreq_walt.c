@@ -486,10 +486,10 @@ out:
 }
 
 #define NL_RATIO 80
-#define DEFAULT_HISPEED_LOAD 98
-#define DEFAULT_SILVER_RTG_BOOST_FREQ 0
-#define DEFAULT_GOLD_RTG_BOOST_FREQ 0
-#define DEFAULT_PRIME_RTG_BOOST_FREQ 0
+#define DEFAULT_HISPEED_LOAD 95
+#define DEFAULT_SILVER_RTG_BOOST_FREQ 300000
+#define DEFAULT_GOLD_RTG_BOOST_FREQ 300000
+#define DEFAULT_PRIME_RTG_BOOST_FREQ 700000
 static inline void max_and_reason(unsigned long *cur_util, unsigned long boost_util,
 		struct waltgov_cpu *wg_cpu, unsigned int reason)
 {
