@@ -20,7 +20,9 @@ enum pause_type {
 
 /* if a cpu is halting */
 struct cpumask __cpu_halt_mask;
+EXPORT_SYMBOL_GPL(__cpu_halt_mask);
 struct cpumask __cpu_partial_halt_mask;
+EXPORT_SYMBOL_GPL(__cpu_partial_halt_mask);
 
 /* spin lock to allow calling from non-preemptible context */
 static DEFINE_RAW_SPINLOCK(halt_lock);

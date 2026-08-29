@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
- * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * Copyright (c) 2024-2025, Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include "walt.h"
@@ -68,7 +68,6 @@ static bool move_task(int src_cpu, int dst_cpu, cpumask_t *dst_cpu_mask_to_avoid
 	bool moved = false;
 	unsigned long flags;
 	unsigned long util, max_task_util = 0;
-	struct rq *rq;
 
 	raw_spin_lock_irqsave(&src_rq->__lock, flags);
 
@@ -78,8 +77,6 @@ static bool move_task(int src_cpu, int dst_cpu, cpumask_t *dst_cpu_mask_to_avoid
 	}
 
 	list_for_each_entry_reverse(p, &src_rq->cfs_tasks, se.group_node) {
-		rq = task_rq(p);
-
 		if (p->se.sched_delayed)
 			continue;
 
@@ -95,8 +92,6 @@ static bool move_task(int src_cpu, int dst_cpu, cpumask_t *dst_cpu_mask_to_avoid
 		util = task_util(p);
 
 		if (util > max_task_util) {
-			if (task_is_blocked(p) || task_current_donor(rq, p) ^ task_current(rq, p))
-				continue;
 			max_task_util = util;
 			target_task = p;
 		}

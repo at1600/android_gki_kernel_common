@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2014-2021, The Linux Foundation. All rights reserved.
- * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * Copyright (c) 2022-2024, Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #define pr_fmt(fmt)	"core_ctl: " fmt
@@ -105,6 +105,30 @@ static unsigned int get_assist_active_cpu_count(const struct cluster_data *clust
 static unsigned int active_cpu_count_from_mask(const cpumask_t *cpus);
 static void __ref do_core_ctl(void);
 
+// MIUI ADD: Task_Attribute_Sched
+void miui_corectl_cpu_busy(unsigned int flag, unsigned int val)
+{
+	struct cluster_data *cluster;
+	unsigned long flags;
+	unsigned int index = 0;
+  	int i = 0;
+	spin_lock_irqsave(&state_lock, flags);
+	for_each_cluster(cluster, index) {
+	if (!cluster) {
+			printk(KERN_ERR "miui_corectl_cpu_busy: cluster at index %u is NULL\n", index);
+			continue;
+	}
+	if (flag == 1) {
+		for (i = 0; i < cluster->num_cpus; i++)
+			cluster->busy_up_thres[i] = val;
+	} else {
+		for (i = 0; i < cluster->num_cpus; i++)
+		cluster->busy_down_thres[i] = val;
+	}
+	}
+	spin_unlock_irqrestore(&state_lock, flags);
+}
+// END Task_Attribute_Sched
 cpumask_t part_haltable_cpus = { CPU_BITS_NONE };
 /* ========================= sysfs interface =========================== */
 
@@ -1099,7 +1123,7 @@ static unsigned int apply_task_need(const struct cluster_data *cluster)
 static unsigned int apply_limits(const struct cluster_data *cluster,
 				 unsigned int need_cpus)
 {
-	if (!cluster->enable || walt_quiet_state)
+	if (!cluster->enable)
 		return cluster->num_cpus;
 
 	return min(max(cluster->min_cpus, need_cpus), cluster->max_cpus);
@@ -1142,8 +1166,7 @@ static bool adjustment_possible(const struct cluster_data *cluster,
 						cluster_paused_cpus(cluster)));
 }
 
-#define GIANT_TASK_OFFLINE_DELAY_NS 300000000
-static bool eval_need(struct cluster_data *cluster, u64 window_start)
+static bool eval_need(struct cluster_data *cluster)
 {
 	unsigned long flags;
 	unsigned int need_cpus = 0, last_need;
@@ -1157,10 +1180,7 @@ static bool eval_need(struct cluster_data *cluster, u64 window_start)
 
 	spin_lock_irqsave(&state_lock, flags);
 
-	if (cluster->boost || !cluster->enable ||
-		(walt_rotation_stop_hyst_start_ts &&
-		 (window_start - walt_rotation_stop_hyst_start_ts <
-		  GIANT_TASK_OFFLINE_DELAY_NS)))
+	if (cluster->boost || !cluster->enable)
 		need_cpus = cluster->max_cpus;
 	else
 		need_cpus = apply_task_need(cluster);
@@ -1205,9 +1225,7 @@ unlock:
 
 static void sysfs_param_changed(struct cluster_data *cluster)
 {
-	u64 now = walt_sched_clock();
-
-	if (eval_need(cluster, now))
+	if (eval_need(cluster))
 		wake_up_core_ctl_thread();
 }
 
@@ -1379,7 +1397,6 @@ static bool core_ctl_non_large_cpus_below_busy_pct(void)
 	return true;
 }
 
-#define SBT_CPU_BUSY_UTIL_THRESH 200
 bool prev_is_sbt;
 #define SBT_LIMIT 45
 /* is the system in a single-big-thread case? */
@@ -1401,9 +1418,6 @@ static inline bool core_ctl_is_sbt(int prev_is_sbt_windows, u32 wakeup_ctr_sum)
 		goto out;
 
 	if (!core_ctl_non_large_cpus_below_busy_pct())
-		goto out;
-
-	if (!any_large_above_util_threshold(SBT_CPU_BUSY_UTIL_THRESH))
 		goto out;
 
 	if (is_large_cpu_cap_low())
@@ -1485,7 +1499,7 @@ void core_ctl_check(u64 window_start, u32 wakeup_ctr_sum)
 		return;
 	}
 
-	if ((window_start == core_ctl_check_timestamp) && !walt_quiet_state)
+	if (window_start == core_ctl_check_timestamp)
 		return;
 
 	core_ctl_check_timestamp = window_start;
@@ -1506,7 +1520,7 @@ void core_ctl_check(u64 window_start, u32 wakeup_ctr_sum)
 	update_running_avg(window_start, wakeup_ctr_sum);
 
 	for_each_cluster(cluster, index)
-		wakeup |= eval_need(cluster, window_start);
+		wakeup |= eval_need(cluster);
 
 	if (wakeup)
 		do_core_ctl();

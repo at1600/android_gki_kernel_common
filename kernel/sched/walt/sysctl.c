@@ -14,6 +14,7 @@ static int neg_five = -5;
 static int three = 3;
 static int four = 4;
 static int five = 5;
+static int two_hundred_fifty_five = 255;
 static unsigned int ns_per_sec = NSEC_PER_SEC;
 static unsigned int one_hundred_thousand = 100000;
 static unsigned int two_hundred_million = 200000000;
@@ -23,11 +24,6 @@ static int one_thousand = 1000;
 static int one_thousand_twenty_four = 1024;
 static int two_thousand = 2000;
 static int max_nr_pipeline = MAX_NR_PIPELINE;
-
-/* This is the decimal value of max supported cpus by WALT.
- * Maximum number of supported cpus are calculated as MAX_CLUSTERS * MAX_CPUS_PER_CLUSTER
- */
-static u32 max_supported_cpus_value = GENMASK_TYPE(u32, (MAX_CLUSTERS * MAX_CPUS_PER_CLUSTER)-1, 0);
 
 /*
  * CFS task prio range is [100 ... 139]
@@ -249,7 +245,7 @@ static int walt_lib_name_handler(const struct ctl_table *table, int write,
 	if (ret)
 		goto unlock_mutex;
 
-	/* update count if there is change in library list */
+	/* update count if ther eis change in library list */
 	if (strcmp(old_path, sched_lib_name))
 		lib_update_cnt = (lib_update_cnt + 1) % LIB_UPDATE_CNT_MAX;
 
@@ -327,12 +323,9 @@ static int walt_proc_pipeline_cpus_handler(const struct ctl_table *table,
 	unsigned int old_value;
 	unsigned long bitmask;
 	const unsigned long *bitmaskp = &bitmask;
-	cpumask_t tmp;
 	static bool written_once;
 	static DEFINE_MUTEX(mutex);
 	struct ctl_table local_table = *table;
-	struct walt_sched_cluster *cluster;
-	int idx = 0;
 
 	mutex_lock(&mutex);
 
@@ -348,27 +341,8 @@ static int walt_proc_pipeline_cpus_handler(const struct ctl_table *table,
 
 	bitmask = (unsigned long)sysctl_sched_pipeline_cpus;
 	bitmap_copy(sysctl_bitmap, bitmaskp, WALT_NR_CPUS);
-	cpumask_copy(&tmp, to_cpumask(sysctl_bitmap));
-	for_each_sched_cluster(cluster) {
-		if (cpumask_intersects(&cluster->cpus, &tmp)) {
-			if (!idx)
-				pipeline_lower_cluster_id = cluster->id;
-			else
-				pipeline_higher_cluster_id = cluster->id;
-			idx++;
-		}
-	}
-	/* Pipeline is confined within two clusters only */
-	if (idx > 2) {
-		sysctl_sched_pipeline_cpus = old_value;
-		ret = -EINVAL;
-		goto unlock;
-	}
+	cpumask_copy(&cpus_for_pipeline, to_cpumask(sysctl_bitmap));
 
-	if (idx == 1)
-		single_cluster_pipeline = true;
-
-	cpumask_copy(&cpus_for_pipeline, &tmp);
 	written_once = true;
 unlock:
 	mutex_unlock(&mutex);
@@ -782,7 +756,7 @@ int sched_updown_migrate_handler(const struct ctl_table *table, int write,
 
 	/* check if valid pct values are passed in */
 	for (i = 0; i < cap_margin_levels; i++) {
-		if (val[i] <= 0) {
+		if (val[i] <= 0 || val[i] > 100) {
 			ret = -EINVAL;
 			goto unlock_mutex;
 		}
@@ -854,7 +828,7 @@ int sched_cgroup_updown_migrate_handler(const struct ctl_table *table, int write
 
 	/* check if valid pct values are passed in */
 	for (i = 0; i < NUM_UPDOWN_SETTINGS; i++) {
-		if (val[i] <= 0) {
+		if (val[i] <= 0 || val[i] > 100) {
 			ret = -EINVAL;
 			goto unlock_mutex;
 		}
@@ -1269,6 +1243,30 @@ unlock_mutex:
 	mutex_unlock(&load_sync_mutex);
 	return ret;
 }
+//MIUI ADD: Task_Attribute_Sched
+static int sys_miui_power_enhance_handler(const struct ctl_table *table, int write,
+					       void __user *buffer, size_t *lenp,
+					       loff_t *ppos)
+{
+	int ret=-EACCES;;
+	ret = proc_douintvec_minmax(table, write, buffer, lenp, ppos);
+	if (ret	|| !write)
+		goto unlock_mutex;
+
+	if(miui_power_enhance_feat(MIUI_POWER_ENHANCE_CPU_BUSY_THRES))
+	{
+		miui_corectl_cpu_busy(1,70);
+		miui_corectl_cpu_busy(0,40);
+	}
+	else
+	{
+		miui_corectl_cpu_busy(1,60);
+		miui_corectl_cpu_busy(0,30);
+	}
+unlock_mutex:
+	return ret;
+}
+//END Task_Attribute_Sched
 
 #endif /* CONFIG_PROC_SYSCTL */
 
@@ -1865,7 +1863,7 @@ static struct ctl_table walt_table[] = {
 		.mode		= 0644,
 		.proc_handler	= sched_busy_hyst_handler,
 		.extra1		= SYSCTL_ZERO,
-		.extra2		= &max_supported_cpus_value,
+		.extra2		= &two_hundred_fifty_five,
 	},
 	{
 		.procname	= "sched_busy_hyst_ns",
@@ -1883,7 +1881,7 @@ static struct ctl_table walt_table[] = {
 		.mode		= 0644,
 		.proc_handler	= sched_busy_hyst_handler,
 		.extra1		= SYSCTL_ZERO,
-		.extra2		= &max_supported_cpus_value,
+		.extra2		= &two_hundred_fifty_five,
 	},
 	{
 		.procname	= "sched_coloc_busy_hyst_cpu_ns",
@@ -1919,7 +1917,7 @@ static struct ctl_table walt_table[] = {
 		.mode		= 0644,
 		.proc_handler	= sched_busy_hyst_handler,
 		.extra1		= SYSCTL_ZERO,
-		.extra2		= &max_supported_cpus_value,
+		.extra2		= &two_hundred_fifty_five,
 	},
 	{
 		.procname	= "sched_util_busy_hyst_cpu_ns",
@@ -2066,7 +2064,7 @@ static struct ctl_table walt_table[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_douintvec_minmax,
 		.extra1		= SYSCTL_ZERO,
-		.extra2		= &max_supported_cpus_value,
+		.extra2		= &two_hundred_fifty_five,
 	},
 	{
 		.procname	= "sched_wake_up_idle",
@@ -2239,6 +2237,17 @@ static struct ctl_table walt_table[] = {
 		.extra1		= SYSCTL_ZERO,
 		.extra2		= &max_nr_pipeline,
 	},
+//MIUI ADD: Task_Attribute_Sched
+    {
+		.procname	= "sys_miui_power_enhance",
+		.data		= &miui_power_enhance,
+		.maxlen		= sizeof(unsigned int),
+		.mode		= 0644,
+		.proc_handler	= sys_miui_power_enhance_handler,
+		.extra1		= SYSCTL_ZERO,
+		.extra2		= SYSCTL_INT_MAX,
+    },
+//END Task_Attribute_Sched
 	{
 		.procname	= "sched_sbt_enable",
 		.data		= &sysctl_sched_sbt_enable,

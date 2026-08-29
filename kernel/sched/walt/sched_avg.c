@@ -35,8 +35,6 @@ static DEFINE_PER_CPU(u64, coloc_hyst_time);
 static DEFINE_PER_CPU(u64, util_hyst_time);
 static DEFINE_PER_CPU(u64, smart_freq_legacy_reason_hyst_ns);
 
-unsigned int trailblazer_boost_thresh_ipc;
-
 #define NR_THRESHOLD_PCT		40
 #define MAX_RTGB_TIME (sysctl_sched_coloc_busy_hyst_max_ms * NSEC_PER_MSEC)
 
@@ -87,7 +85,6 @@ struct sched_avg_stats *sched_get_nr_running_avg(void)
 	struct walt_sched_cluster *cluster;
 	bool trailblazer_boost_cpu = false;
 	bool large_cpu_cap_low = is_large_cpu_cap_low();
-	unsigned long max_capacity = 1024;
 
 	if (unlikely(walt_disabled))
 		return NULL;
@@ -97,14 +94,12 @@ struct sched_avg_stats *sched_get_nr_running_avg(void)
 
 	/* read and reset nr_running counts */
 	for_each_possible_cpu(cpu) {
-		unsigned long cpu_capacity;
 		unsigned long flags;
 		u64 diff;
 
-		cpu_capacity = arch_scale_cpu_capacity(cpu);
 		trailblazer_boost_cpu |= (walt_trailblazer_tasks(cpu) &&
-				cpu_capacity == max_capacity &&
-				per_cpu(ipc_cnt, cpu) >= trailblazer_boost_thresh_ipc &&
+				cpumask_test_cpu(cpu, &cpu_array[0][num_sched_clusters-1]) &&
+				per_cpu(ipc_cnt, cpu) >= TRAILBLAZER_BOOST_THRESH_IPC &&
 				!large_cpu_cap_low);
 
 		spin_lock_irqsave(&per_cpu(nr_lock, cpu), flags);
@@ -300,7 +295,7 @@ int sched_busy_hyst_handler(const struct ctl_table *table, int write,
 
 	ret = proc_dointvec_minmax(&local_table, write, buffer, lenp, ppos);
 
-	if (!ret && write && !walt_quiet_state)
+	if (!ret && write)
 		sched_update_hyst_times();
 
 	return ret;
@@ -319,9 +314,6 @@ void sched_update_nr_prod(int cpu, int enq)
 	u64 diff;
 	u64 curr_time;
 	unsigned long flags, nr_running;
-
-	if (walt_quiet_state)
-		return;
 
 	spin_lock_irqsave(&per_cpu(nr_lock, cpu), flags);
 	nr_running = per_cpu(nr, cpu);
@@ -380,9 +372,6 @@ int sched_lpm_disallowed_time(int cpu, u64 *timeout)
 	u64 bias_end_time = atomic64_read(&per_cpu(busy_hyst_end_time, cpu));
 
 	if (unlikely(walt_disabled))
-		return -EAGAIN;
-
-	if (walt_quiet_state)
 		return -EAGAIN;
 
 	if (unlikely(is_reserved(cpu))) {

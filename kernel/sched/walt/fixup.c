@@ -47,14 +47,13 @@ static bool is_sched_lib_based_app(pid_t pid)
 
 	/*
 	 * if cached lib_update_cnt in wts is same as global 'lib_update_cnt' then
-	 * the task is already evaluated and return the evaluated value (Bit 7).
-	 * For cases lib_update_cnt is different(cases where lib name is updated)
+	 * the task is already evaluated and return the evaluated value (Bit 15).
+	 * For cased lib_update_cnt is different(cases where lib name is udpated)
 	 * re-evaluate the state.
 	 */
 	wts = (struct walt_task_struct *)android_task_vendor_data(p);
 	if ((wts->lib_app_state & LIB_UPDATE_CNT_MAX) == lib_update_cnt) {
 		kfree(tmp_lib_name);
-		put_task_struct(p);
 		return !!(wts->lib_app_state & 0x80);
 	}
 
@@ -89,7 +88,7 @@ release_sem:
 
 	}
 	wts->lib_app_state = found ? BIT(7) : 0;
-	wts->lib_app_state |= lib_update_cnt;
+	wts->lib_app_state |= (lib_update_cnt & LIB_UPDATE_CNT_MAX);
 	put_task_struct(p);
 	kfree(tmp_lib_name);
 	return found;
@@ -122,21 +121,11 @@ static void android_rvh_show_max_freq(void *unused, struct cpufreq_policy *polic
 static void android_rvh_cpu_capacity_show(void *unused,
 		unsigned long *capacity, int cpu)
 {
-	bool fake_capacity = false;
-
 	if (!soc_sched_lib_name_capacity)
 		return;
 
 	if ((is_sched_lib_based_app(current->pid) || is_sched_lib_task()) &&
-							(cpu < soc_sched_lib_name_capacity)) {
-		fake_capacity = true;
-
-		if ((sysctl_sched_heavy_nr || sysctl_sched_pipeline_util_thres) &&
-						cpumask_test_cpu(cpu, &cpus_for_pipeline))
-			fake_capacity = false;
-	}
-
-	if (fake_capacity)
+			cpu < soc_sched_lib_name_capacity)
 		*capacity = 100;
 }
 
