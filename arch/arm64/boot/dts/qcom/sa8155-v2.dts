@@ -3,11 +3,13 @@
  * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
+/dts-v1/;
+
 #include "sa8155-v2.dtsi"
 
 / {
-	model = "Qualcomm Technologies, Inc. SA8155P ";
-	qcom,msm-name = "SA8155P V1";
-	compatible = "qcom,sa8155p";
-	qcom,msm-id = <367 0x10000>;
+	model = "Qualcomm Technologies, Inc. SA8155 v2 SoC";
+	compatible = "qcom,sa8155";
+	qcom,pmic-name = "PM8150";
+	qcom,board-id = <0 0>;
 };
